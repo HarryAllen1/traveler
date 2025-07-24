@@ -1,0 +1,6 @@
+{
+	"prettier.prettierPath": "node_modules/prettier",
+	"eslint.validate": ["svelte"],
+	"typescript.preferences.importModuleSpecifierEnding": "js",
+	"javascript.preferences.importModuleSpecifierEnding": "js"
+}

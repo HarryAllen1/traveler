@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { PUBLIC_MAP_ID } from '$env/static/public';
 	import { Geolocation } from '$lib/Geolocation.svelte.js';
-	import { geolocationCoordinatesToLatLng } from '$lib/utils.js';
+	import { regionConstants } from '$lib/region-constants.js';
+	import { debounce, geolocationCoordinatesToLatLng } from '$lib/utils.js';
 	import { watch } from 'runed';
 	import { onDestroy, onMount } from 'svelte';
 	import type { PageProps } from './$types.js';
-	import sign from './sign.svg?raw';
-	import { baseRoutePolylines, stops } from './features.js';
-	import { regionConstants } from '$lib/region-constants.js';
+	import { baseRoutePolylines, createStopMarker, loadStops } from './features.js';
 
 	let { data }: PageProps = $props();
 
@@ -32,7 +31,6 @@
 		},
 	);
 	onMount(() => {
-		const isDark = globalThis.matchMedia('(prefers-color-scheme: dark)').matches;
 		const map = new google.maps.Map(mapElement, {
 			disableDefaultUI: true,
 			center: {
@@ -45,31 +43,7 @@
 		});
 
 		for (const stop of data.stops.data.list) {
-			const stopDiv = document.createElement('div');
-			stopDiv.classList.add(
-				'bg-slate-500',
-				'dark:bg-slate-200',
-				'text-white',
-				'dark:text-black',
-				'rounded-full',
-				'p-1',
-				'size-6',
-				'border-white',
-				'border-2',
-				'dark:border-black',
-			);
-			stopDiv.innerHTML = sign;
-			stops.set(stop.id, {
-				data: stop,
-				marker: new google.maps.marker.AdvancedMarkerElement({
-					content: stopDiv,
-					position: {
-						lat: stop.lat,
-						lng: stop.lon,
-					},
-					map,
-				}),
-			});
+			createStopMarker(map, stop);
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -87,9 +61,12 @@
 			}
 		}
 
-		map.addListener('bounds_changed', () => {
-			const bounds = map.getBounds();
-		});
+		map.addListener(
+			'bounds_changed',
+			debounce(async () => {
+				await loadStops(map);
+			}, 300),
+		);
 
 		navigator.geolocation.getCurrentPosition(
 			(position) => {

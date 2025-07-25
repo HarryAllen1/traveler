@@ -1,6 +1,7 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import { type Snippet } from 'svelte';
 	import '../app.css';
+	import ApiProvider from '$lib/APIProvider.svelte';
 
 	interface Props {
 		children?: Snippet;
@@ -13,4 +14,6 @@
 	<title>Traveler</title>
 </svelte:head>
 
-{@render children?.()}
+<ApiProvider>
+	{@render children?.()}
+</ApiProvider>

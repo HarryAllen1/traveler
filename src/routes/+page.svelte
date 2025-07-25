@@ -5,10 +5,7 @@
 	import { debounce, geolocationCoordinatesToLatLng } from '$lib/utils.js';
 	import { watch } from 'runed';
 	import { onDestroy, onMount } from 'svelte';
-	import type { PageProps } from './$types.js';
-	import { baseRoutePolylines, createStopMarker, loadStops } from './features.js';
-
-	let { data }: PageProps = $props();
+	import { baseRoutePolylines, loadStops } from './features.js';
 
 	let mapElement: HTMLDivElement;
 
@@ -30,7 +27,9 @@
 			}
 		},
 	);
-	onMount(() => {
+
+	onMount(async () => {
+		await new Promise((resolve) => setTimeout(resolve, 0));
 		const map = new google.maps.Map(mapElement, {
 			disableDefaultUI: true,
 			center: {
@@ -41,10 +40,6 @@
 			colorScheme: google.maps.ColorScheme.FOLLOW_SYSTEM,
 			zoom: 15,
 		});
-
-		for (const stop of data.stops.data.list) {
-			createStopMarker(map, stop);
-		}
 
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		for (const route of regionConstants.get('pugetsound')!) {

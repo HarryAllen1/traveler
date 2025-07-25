@@ -114,6 +114,12 @@ export default tseslint.config(
 		},
 	},
 	{
-		ignores: ['src/lib/components/ui/', 'src/lib/ui-utils.ts', 'static'],
+		ignores: [
+			'src/lib/components/ui/',
+			'src/lib/ui-utils.ts',
+			'static',
+			'api',
+			'capacitor.config.ts',
+		],
 	},
 );

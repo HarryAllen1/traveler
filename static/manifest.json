@@ -1,0 +1,18 @@
+{
+	"$schema": "https://www.schemastore.org/web-manifest-combined.json",
+	"name": "Traveler",
+	"short_name": "Traveler",
+	"background_color": "#ffffff",
+	"icons": [
+		{
+			"src": "/icons/icon-192.webp",
+			"type": "image/webp",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/icons/icon-512.webp",
+			"type": "image/webp",
+			"sizes": "512x512"
+		}
+	]
+}

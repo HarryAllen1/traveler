@@ -46,7 +46,7 @@
 		"typescript-eslint": "8.38.0",
 		"vaul-svelte": "1.0.0-next.7",
 		"vite": "7.0.5",
-		"wrangler": "^4.26.0"
+		"wrangler": "^4.59.1"
 	},
 	"dependencies": {
 		"@capacitor/android": "^7.4.2",
